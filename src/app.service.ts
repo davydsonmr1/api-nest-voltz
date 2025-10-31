@@ -32,13 +32,16 @@ export class AppService {
     return this.usuarioModelo.find();
   }
 
-  // Função de criar o pagamento (recebe os 'dadosDoPagamento' que vêm do Controller)
-  async criarPagamento(dadosDoPagamento: any): Promise<Pagamento> {
-    console.log('Recebido no Service para salvar:', dadosDoPagamento);
-    // Cria uma nova instância do modelo com os dados
-    const novoPagamento = new this.pagamentoModelo(dadosDoPagamento);
-    return novoPagamento.save();
-  }
+  async criarPagamento(dadosDoPagamento: any, idDoUsuario: string): Promise<Pagamento> {
+  console.log(`[SERVICE] Criando pagamento para o usuário: ${idDoUsuario}`);
+  const dadosCompletos = {
+    ...dadosDoPagamento,  // Pega tudo do JSON (valor, idPagamento, etc)
+    usuario: idDoUsuario 
+  };
+
+  const novoPagamento = new this.pagamentoModelo(dadosCompletos);
+  return novoPagamento.save();
+}
 
   async atualizarStatus(idPagamento: string, novoStatus: string) {
     console.log(`[SERVICE] Recebido pedido para atualizar ${idPagamento} para ${novoStatus}`);

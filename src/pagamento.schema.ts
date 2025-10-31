@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
+import { Document, Types, Schema as MongooseSchema } from 'mongoose';
+import { Usuario } from './usuario.schema';
 
 
 // @Schema() diz ao Nest que esta classe é um "molde" de banco de dados
@@ -24,6 +24,9 @@ export class Pagamento extends Document {
 
   @Prop({ default: 'EM PROCESSAMENTO' })
   status: string;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Usuario' })
+  usuario: Types.ObjectId; // Vai guardar o _id (ID do Mongo) do usuário
 }
 
 //  SchemaFactory cria o Schema a partir da classe Pagamento

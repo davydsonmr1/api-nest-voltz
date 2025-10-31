@@ -10,14 +10,14 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  //'POST /api/pagamentos'
-  @Post('pagamentos')
-  //  O '@Body()' pega o JSON do Postman e o entrega na variável 'dados'
-  async criarPagamento(@Body() dados: any) {
-    console.log('Controller recebeu a requisição:', dados);
-    // 3. chama o Service 
-    return this.appService.criarPagamento(dados);
-  }
+@Post('usuarios/:idUsuario/pagamentos')
+async criarPagamento(
+  @Param('idUsuario') idUsuario: string,
+  @Body() dados: any
+) {
+  console.log(`[CONTROLLER] Recebida requisição POST /usuarios/${idUsuario}/pagamentos`);
+  return this.appService.criarPagamento(dados, idUsuario);
+}
 
   @EventPattern() // Deixando em branco, ele pega tudo da fila principal
   async consumirAtualizacao(@Payload() mensagem: any) {
