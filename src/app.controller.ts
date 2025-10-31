@@ -1,0 +1,45 @@
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { AppService } from './app.service';
+
+@Controller('api')
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @Get() 
+  getHello(): string {
+    return this.appService.getHello();
+  }
+  //'POST /api/pagamentos'
+  @Post('pagamentos')
+  //  O '@Body()' pega o JSON do Postman e o entrega na variável 'dados'
+  async criarPagamento(@Body() dados: any) {
+    console.log('Controller recebeu a requisição:', dados);
+    // 3. chama o Service 
+    return this.appService.criarPagamento(dados);
+  }
+
+  @EventPattern() // Deixando em branco, ele pega tudo da fila principal
+  async consumirAtualizacao(@Payload() mensagem: any) {
+    console.log('--- MENSAGEM DO RABBITMQ RECEBIDA ---');
+    console.log('[CONTROLLER] Mensagem:', mensagem);
+
+    // 3. Pega os dados da mensagem
+    const { idPagamento, novoStatus } = mensagem;
+    // 4. Chama o Service 
+    if (idPagamento && novoStatus) {
+      await this.appService.atualizarStatus(idPagamento, novoStatus);
+    } else {
+      console.warn('[CONTROLLER] Mensagem recebida fora do padrão esperado.');
+    }
+  }
+
+  //Verificar status: GET /api/pagamentos/id-do-pagamento
+  @Get('pagamentos/:id')
+  async verificarPagamento(@Param('id') id: string) {
+    console.log(`[CONTROLLER] Recebida requisição GET para ${id}`);
+    // Chama o Service
+    return this.appService.buscarUmPagamento(id);
+  }
+}
+
