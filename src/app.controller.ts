@@ -49,5 +49,12 @@ export class AppController {
     return this.appService.criarUsuario(dados);
   }
 
+  //LISTAR todos os usuários
+  @Get('usuarios')
+  async verTodosUsuarios() {
+    console.log('[CONTROLLER] Recebida requisição GET /usuarios');
+    return this.appService.listarUsuarios();
+  }
+
 }
 

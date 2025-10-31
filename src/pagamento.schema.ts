@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+
+
 // @Schema() diz ao Nest que esta classe é um "molde" de banco de dados
 @Schema()
 export class Pagamento extends Document {

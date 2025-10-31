@@ -26,6 +26,12 @@ export class AppService {
     return novoUsuario.save();
   }
 
+  async listarUsuarios(): Promise<Usuario[]> {
+    console.log('[SERVICE] Listando todos os usuários');
+    // .find() sem nada dentro significa "ache todos"
+    return this.usuarioModelo.find();
+  }
+
   // Função de criar o pagamento (recebe os 'dadosDoPagamento' que vêm do Controller)
   async criarPagamento(dadosDoPagamento: any): Promise<Pagamento> {
     console.log('Recebido no Service para salvar:', dadosDoPagamento);
