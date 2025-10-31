@@ -18,6 +18,14 @@ export class AppService {
     return 'API de Pagamentos em NestJS está no ar!';
   }
 
+   // Função de criar o usuario (copiei a logica de criar pagamento)
+  async criarUsuario(dadosDoUsuario: any): Promise<Usuario> {
+    console.log('Recebido no Service para salvar usuario:', dadosDoUsuario);
+    // Cria uma nova instância do modelo com os dados
+    const novoUsuario = new this.usuarioModelo(dadosDoUsuario);
+    return novoUsuario.save();
+  }
+
   // Função de criar o pagamento (recebe os 'dadosDoPagamento' que vêm do Controller)
   async criarPagamento(dadosDoPagamento: any): Promise<Pagamento> {
     console.log('Recebido no Service para salvar:', dadosDoPagamento);

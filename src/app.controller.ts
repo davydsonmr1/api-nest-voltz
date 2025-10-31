@@ -41,5 +41,13 @@ export class AppController {
     // Chama o Service
     return this.appService.buscarUmPagamento(id);
   }
+
+  // Novo endpoint para criar usuário: POST /api/usuarios
+  @Post('usuarios')
+  async criarNovoUsuario(@Body() dados: any) {
+    console.log('[CONTROLLER] Recebida requisição POST /usuarios');
+    return this.appService.criarUsuario(dados);
+  }
+
 }
 
