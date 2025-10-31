@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Pagamento } from './pagamento.schema';
+import { Usuario } from './usuario.schema';
 
 @Injectable()
 export class AppService {
   constructor(
     @InjectModel(Pagamento.name)
     private readonly pagamentoModelo: Model<Pagamento>,
+
+    @InjectModel(Usuario.name)
+    private readonly usuarioModelo: Model<Usuario>,
   ) {}
 
   getHello(): string {
