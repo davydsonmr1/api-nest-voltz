@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, NotFoundException } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { AppService } from './app.service';
 
@@ -23,7 +23,7 @@ async criarPagamento(
   async consumirAtualizacao(@Payload() mensagem: any) {
     console.log('--- MENSAGEM DO RABBITMQ RECEBIDA ---');
     console.log('[CONTROLLER] Mensagem:', mensagem);
-    
+
     const { idPagamento, novoStatus } = mensagem;
     if (idPagamento && novoStatus) {
       await this.appService.atualizarStatus(idPagamento, novoStatus);
@@ -51,6 +51,20 @@ async criarPagamento(
   async verTodosUsuarios() {
     console.log('[CONTROLLER] Recebida requisição GET /usuarios');
     return this.appService.listarUsuarios();
+  }
+
+  @Delete('usuarios/:id')
+  async removerUsuario(@Param('id') id: string) {
+    console.log(`[CONTROLLER] Recebida requisição DELETE para /api/usuarios/${id}`);
+    const usuarioDeletado = await this.appService.deletarUsuario(id);
+    if (!usuarioDeletado) {
+      throw new NotFoundException(`Usuário com ID ${id} não foi encontrado.`);
+    }
+
+    return { 
+      mensagem: 'Usuário deletado com sucesso',
+      usuarioQueFoiDeletado: usuarioDeletado 
+    };
   }
 
 }

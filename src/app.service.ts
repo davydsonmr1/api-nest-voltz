@@ -9,7 +9,6 @@ export class AppService {
   constructor(
     @InjectModel(Pagamento.name)
     private readonly pagamentoModelo: Model<Pagamento>,
-
     @InjectModel(Usuario.name)
     private readonly usuarioModelo: Model<Usuario>,
   ) {}
@@ -64,5 +63,11 @@ export class AppService {
   async buscarUmPagamento(idPagamento: string) {
     console.log(`[SERVICE] Buscando pagamento ${idPagamento}`);
     return this.pagamentoModelo.findOne({ idPagamento: idPagamento });
+  }
+
+  async deletarUsuario(idDoUsuario: string) {
+    console.log(`[SERVICE] Recebido pedido para DELETAR usuário: ${idDoUsuario}`);
+    const usuarioDeletado = await this.usuarioModelo.findByIdAndDelete(idDoUsuario);
+    return usuarioDeletado;
   }
 }
