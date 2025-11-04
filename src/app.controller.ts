@@ -23,10 +23,8 @@ async criarPagamento(
   async consumirAtualizacao(@Payload() mensagem: any) {
     console.log('--- MENSAGEM DO RABBITMQ RECEBIDA ---');
     console.log('[CONTROLLER] Mensagem:', mensagem);
-
-    // 3. Pega os dados da mensagem
+    
     const { idPagamento, novoStatus } = mensagem;
-    // 4. Chama o Service 
     if (idPagamento && novoStatus) {
       await this.appService.atualizarStatus(idPagamento, novoStatus);
     } else {
@@ -38,11 +36,10 @@ async criarPagamento(
   @Get('pagamentos/:id')
   async verificarPagamento(@Param('id') id: string) {
     console.log(`[CONTROLLER] Recebida requisição GET para ${id}`);
-    // Chama o Service
     return this.appService.buscarUmPagamento(id);
   }
 
-  // Novo endpoint para criar usuário: POST /api/usuarios
+  // criar usuário: POST /api/usuarios
   @Post('usuarios')
   async criarNovoUsuario(@Body() dados: any) {
     console.log('[CONTROLLER] Recebida requisição POST /usuarios');
