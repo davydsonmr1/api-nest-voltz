@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Pagamento } from './pagamento.schema';
 import { Usuario } from './usuario.schema';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AppService {
@@ -19,8 +21,20 @@ export class AppService {
 
    // Função de criar o usuario (copiei a logica de criar pagamento)
   async criarUsuario(dadosDoUsuario: any): Promise<Usuario> {
-    console.log('Recebido no Service para salvar usuario:', dadosDoUsuario);
-    const novoUsuario = new this.usuarioModelo(dadosDoUsuario);
+    console.log('[SERVICE] Recebido para salvar usuário:', dadosDoUsuario.email);
+    const senhaPura = dadosDoUsuario.senha;
+    const senhaHash = await bcrypt.hash(senhaPura, 10);
+    
+    console.log('[SERVICE] Senha pura:', senhaPura);
+    console.log('[SERVICE] Senha embaralhada (Hash):', senhaHash);
+
+    const dadosParaSalvar = {
+      ...dadosDoUsuario, // Pega tudo que o usuário mandou (nome, email, cpf)
+      senha: senhaHash   // substitui senha pura pelo hash
+    };
+    
+    // 4. SALVA O USUÁRIO COM A SENHA SEGURA
+    const novoUsuario = new this.usuarioModelo(dadosParaSalvar);
     return novoUsuario.save();
   }
 
