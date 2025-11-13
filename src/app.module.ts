@@ -18,10 +18,9 @@ import { PassportModule } from '@nestjs/passport';
     ]),
   PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-
-      secret: 'secretkey123', // Chave secreta para assinar o token (carteirinha)
+      secret: process.env.SECRET_KEY, 
       signOptions: {
-        expiresIn: '1h', // O token (carteirinha) expira em 1 hora
+        expiresIn: '1h',
       },
     }),
   ],
